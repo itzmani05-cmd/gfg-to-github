@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # GFG → GitHub Sync 🚀
 
 **GFG → GitHub Sync** is a professional Chrome Extension (Manifest V3) built with React, Tailwind CSS, and Zustand. It eliminates the repetitive copy-paste workflow by automatically detecting successfully solved GeeksforGeeks problems and prompting you to push the code directly to a GitHub repository of your choice in one click.
@@ -91,3 +92,7 @@ To run the extension locally in developer mode:
 ## 📝 License
 
 This project is licensed under the [MIT License](LICENSE).
+=======
+# gfg-to-github
+Automatically sync solved GeeksforGeeks problem solutions directly to your GitHub repositories in one click.
+>>>>>>> 476e39d3002a8341f969952a4fd37a270784ce2b

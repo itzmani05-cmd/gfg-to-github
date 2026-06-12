@@ -1,0 +1,55 @@
+{
+  "manifest_version": 3,
+  "name": "GFG → GitHub Sync",
+  "version": "1.0.0",
+  "description": "Automatically sync your GeeksforGeeks solutions to your GitHub repositories.",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://*.geeksforgeeks.org/*",
+    "https://api.github.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.geeksforgeeks.org/*"],
+      "js": ["content-main.js"],
+      "world": "MAIN",
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["*://*.geeksforgeeks.org/*"],
+      "js": ["content-isolated.js"],
+      "world": "ISOLATED",
+      "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["gfg-github.css"],
+      "matches": ["https://*.geeksforgeeks.org/*"]
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

@@ -190,17 +190,26 @@ export const Popup: React.FC = () => {
                 <div className="relative">
                   <select
                     value={store.selectedRepo || ''}
-                    onChange={(e) => store.updateSettings({ selectedRepo: e.target.value })}
-                    className="w-full text-xs border border-slate-200/80 rounded-lg p-2 bg-white text-slate-950 font-bold focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all duration-200 appearance-none shadow-sm cursor-pointer"
+                    onChange={(e) => {
+                      const repo = e.target.value;
+                      store.updateSettings({ selectedRepo: repo, selectedBranch: 'main' });
+                      store.fetchBranchesList(repo);
+                    }}
+                    disabled={store.isLoadingRepos}
+                    className="w-full text-xs border border-slate-200/80 rounded-lg p-2 bg-white text-slate-950 font-bold focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all duration-200 appearance-none shadow-sm cursor-pointer disabled:opacity-50 disabled:cursor-wait"
                   >
-                    <option value="" disabled>Select Repository</option>
+                    <option value="" disabled>{store.isLoadingRepos ? 'Loading repositories...' : 'Select Repository'}</option>
                     {store.repos.map((repo) => (
                       <option key={repo.id} value={repo.full_name}>
                         {repo.name} {repo.private ? '🔒' : ''}
                       </option>
                     ))}
                   </select>
-                  <div className="absolute right-3 top-2.5 pointer-events-none text-slate-400 text-[10px]">▼</div>
+                  {store.isLoadingRepos ? (
+                    <Loader2 size={12} className="absolute right-3 top-2.5 animate-spin text-emerald-500" />
+                  ) : (
+                    <div className="absolute right-3 top-2.5 pointer-events-none text-slate-400 text-[10px]">▼</div>
+                  )}
                 </div>
               </div>
 
@@ -213,11 +222,13 @@ export const Popup: React.FC = () => {
                   <select
                     value={store.selectedBranch || 'main'}
                     onChange={(e) => store.updateSettings({ selectedBranch: e.target.value })}
-                    disabled={!store.selectedRepo}
-                    className="w-full text-xs border border-slate-200/80 rounded-lg p-2 bg-white text-slate-950 font-bold focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all duration-200 appearance-none shadow-sm cursor-pointer disabled:opacity-50"
+                    disabled={!store.selectedRepo || store.isLoadingBranches}
+                    className="w-full text-xs border border-slate-200/80 rounded-lg p-2 bg-white text-slate-950 font-bold focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all duration-200 appearance-none shadow-sm cursor-pointer disabled:opacity-50 disabled:cursor-wait"
                   >
                     {store.branches.length === 0 ? (
-                      <option value={store.selectedBranch || 'main'}>{store.selectedBranch || 'main'}</option>
+                      <option value={store.selectedBranch || 'main'}>
+                        {store.isLoadingBranches ? 'Loading branches...' : (store.selectedBranch || 'main')}
+                      </option>
                     ) : (
                       store.branches.map((branch) => (
                         <option key={branch.name} value={branch.name}>
@@ -226,7 +237,11 @@ export const Popup: React.FC = () => {
                       ))
                     )}
                   </select>
-                  <div className="absolute right-3 top-2.5 pointer-events-none text-slate-400 text-[10px]">▼</div>
+                  {store.isLoadingBranches ? (
+                    <Loader2 size={12} className="absolute right-3 top-2.5 animate-spin text-emerald-500" />
+                  ) : (
+                    <div className="absolute right-3 top-2.5 pointer-events-none text-slate-400 text-[10px]">▼</div>
+                  )}
                 </div>
               </div>
 
